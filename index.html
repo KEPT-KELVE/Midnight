@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>midnightOS Developer Preview</title>
+<meta name="description" content="midnightOS is a fast, friendly desktop operating system built on Debian. Try the Developer Preview from a USB stick or install it on your PC.">
+<meta name="theme-color" content="#07060d">
+<meta property="og:title" content="midnightOS Developer Preview">
+<meta property="og:description" content="A fast, friendly desktop built on Debian. Try it from a USB stick, then install it in minutes.">
+<meta property="og:image" content="assets/shots/desktop.jpg">
+<link rel="icon" type="image/png" href="assets/logo-64.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <a class="brand" href="#top"><img src="assets/logo-64.png" alt="" width="30" height="30"><span>midnightOS</span></a>
+  <nav>
+    <a href="#tour">Tour</a>
+    <a href="#features">Features</a>
+    <a href="#install">How to install</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <a class="btn small primary" href="#download">Download</a>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <p class="pill"><span class="dot"></span> Developer Preview · <span data-release="version">Build 0.9</span></p>
+    <h1>Midnight<br><span class="thin">Developer Preview</span></h1>
+    <p class="lead">A calm, fast desktop built on Debian. Try it straight from a USB stick, then install it on your PC in a few minutes.</p>
+    <div class="cta">
+      <a class="btn primary" href="downloads/midnightOS-Setup.exe" download>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 19h14"/></svg>
+        Download for Windows
+      </a>
+      <a class="btn ghost" href="#download">Other ways to get it</a>
+    </div>
+    <p class="fine">Free · 64-bit PC · <span data-release="size">about 3 GB</span> · Setup downloads the system and writes your USB stick for you</p>
+
+    <figure class="hero-shot">
+      <div class="glow"></div>
+      <img src="assets/shots/desktop.jpg" alt="The midnightOS desktop with the taskbar, Start button and desktop icons" width="1600" height="900">
+    </figure>
+  </section>
+
+  <section id="tour" class="tour">
+    <div class="section-head">
+      <p class="eyebrow">Take the tour</p>
+      <h2>Every screen, redesigned for midnight.</h2>
+    </div>
+    <div class="tour-grid">
+      <div class="tour-tabs" role="tablist" aria-label="Screens">
+        <!-- filled from the list in site.js -->
+      </div>
+      <figure class="tour-view">
+        <button class="tour-zoom" aria-label="Open full size">
+          <img id="tourImage" src="assets/shots/start.jpg" alt="" width="1600" height="900">
+        </button>
+        <figcaption id="tourCaption"></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="features" class="features">
+    <div class="section-head">
+      <p class="eyebrow">What's inside</p>
+      <h2>Small things that make a big difference.</h2>
+    </div>
+    <div class="grid">
+      <article class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg></div>
+        <h3>Install in minutes</h3>
+        <p>Start from the USB stick, click <em>Install midnightOS</em>, pick a disk. A first-start setup then asks for your Wi-Fi, name and PIN.</p>
+      </article>
+      <article class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 8V6a2 2 0 012-2h2M16 4h2a2 2 0 012 2v2M20 16v2a2 2 0 01-2 2h-2M8 20H6a2 2 0 01-2-2v-2"/><circle cx="9.5" cy="10.5" r=".8"/><circle cx="14.5" cy="10.5" r=".8"/><path d="M9.5 15c1.5 1.2 3.5 1.2 5 0"/></svg></div>
+        <h3>Face sign-in</h3>
+        <p>Set it up during first start or in Settings. Your face data is kept on your PC and never leaves it.</p>
+      </article>
+      <article class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><rect x="6" y="3" width="12" height="15" rx="3"/><path d="M6 11h12M9 21l1.5-3M15 21l-1.5-3"/><circle cx="9.5" cy="14.5" r=".9"/><circle cx="14.5" cy="14.5" r=".9"/></svg></div>
+        <h3>Metro Browser</h3>
+        <p>A bold, tile-based web browser with its own icons, colours and a lively first-run welcome. Ships as a regular Debian package.</p>
+      </article>
+      <article class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
+        <h3>Admin Approval</h3>
+        <p>Changes to the system ask first, and show exactly which app is asking and what it wants to run.</p>
+      </article>
+      <article class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="8" height="16" rx="1.5"/><rect x="13" y="4" width="8" height="7" rx="1.5"/><rect x="13" y="13" width="8" height="7" rx="1.5"/></svg></div>
+        <h3>Snap zones</h3>
+        <p>Drag a window to an edge, or hover its maximise button, to tile your apps side by side. <em>All windows</em> shows everything at once.</p>
+      </article>
+      <article class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/><circle cx="12" cy="15.5" r="1.3"/></svg></div>
+        <h3>Vault</h3>
+        <p>An encrypted folder for your most private files. It stays locked until you unlock it.</p>
+      </article>
+      <article class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></div>
+        <h3>Phone Connect</h3>
+        <p>See your phone's notifications, send files and share the clipboard with your PC.</p>
+      </article>
+      <article class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M6 9h12a3 3 0 013 3v1a4 4 0 01-7 2.6h-4A4 4 0 013 13v-1a3 3 0 013-3z"/><path d="M8 11v3M6.5 12.5h3"/><circle cx="16" cy="12" r=".8"/><circle cx="17.5" cy="13.8" r=".8"/></svg></div>
+        <h3>Game Overlay</h3>
+        <p>Frame rate, recording and quick settings over any game, one shortcut away.</p>
+      </article>
+      <article class="card">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h3>Its own look and sound</h3>
+        <p>New icons, a white boot spinner, thin type and an original set of system sounds, all made for midnightOS.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="install" class="steps">
+    <div class="section-head">
+      <p class="eyebrow">How to install</p>
+      <h2>Three steps. No terminal needed.</h2>
+    </div>
+    <ol class="step-list">
+      <li>
+        <span class="num">1</span>
+        <h3>Get Setup</h3>
+        <p>Run <strong>midnightOS Setup</strong> on a Windows PC, choose a folder, and it downloads the system image (ISO) and checks that every byte arrived correctly.</p>
+      </li>
+      <li>
+        <span class="num">2</span>
+        <h3>Make a USB stick</h3>
+        <p>Click <strong>Flash to USB</strong> and pick a stick of 8&nbsp;GB or more. Everything on the stick is replaced. Prefer to do it yourself? Any image writer works too.</p>
+      </li>
+      <li>
+        <span class="num">3</span>
+        <h3>Start from the stick</h3>
+        <p>Restart, open your PC's boot menu (often <kbd>F12</kbd>, <kbd>F11</kbd> or <kbd>Esc</kbd>) and choose the USB stick. Try midnightOS, then double-click <strong>Install midnightOS</strong>.</p>
+      </li>
+    </ol>
+    <p class="note"><strong>Before you start:</strong> turn off <em>Secure Boot</em> in your PC's firmware settings. Installing erases the disk you pick, so back up anything you want to keep.</p>
+  </section>
+
+  <section id="download" class="download">
+    <div class="section-head">
+      <p class="eyebrow">Download</p>
+      <h2>Get the Developer Preview.</h2>
+    </div>
+    <div class="dl-grid">
+      <article class="dl-card main">
+        <div class="dl-top">
+          <img src="assets/logo-128.png" alt="" width="56" height="56">
+          <div>
+            <h3>midnightOS Setup for Windows</h3>
+            <p class="muted">Recommended · a small app (about 100 KB)</p>
+          </div>
+        </div>
+        <ul class="checks">
+          <li>Asks where to save the ISO, then downloads it</li>
+          <li>Resumes if your connection drops</li>
+          <li>Checks the download (SHA-256)</li>
+          <li>Writes it to a USB stick, or just closes</li>
+        </ul>
+        <a class="btn primary wide" href="downloads/midnightOS-Setup.exe" download>Download Setup (.exe)</a>
+        <p class="fine">Windows may say the app is from an unknown publisher, because the preview isn't signed yet. Choose <em>More info</em> › <em>Run anyway</em>.</p>
+      </article>
+      <article class="dl-card">
+        <div class="dl-top">
+          <div class="disc" aria-hidden="true"></div>
+          <div>
+            <h3>Disc image (ISO)</h3>
+            <p class="muted" id="isoMeta">For Linux and Mac users, or your own USB tool</p>
+          </div>
+        </div>
+        <p class="small">GitHub stores files up to 2&nbsp;GB, so the image comes in parts. Download all of them, then join them:</p>
+        <ul class="parts" id="isoParts"><li class="muted">Loading the release list…</li></ul>
+        <details class="join">
+          <summary>How to join the parts</summary>
+          <p><strong>Windows (Command Prompt):</strong></p>
+          <pre><code id="joinWin">copy /b midnightOS.iso.part1 + midnightOS.iso.part2 midnightOS.iso</code></pre>
+          <p><strong>Linux or Mac:</strong></p>
+          <pre><code id="joinNix">cat midnightOS.iso.part* &gt; midnightOS.iso</code></pre>
+          <p>Then check it: the SHA-256 should be<br><code class="hash" id="isoHash">listed in release.json</code></p>
+        </details>
+      </article>
+    </div>
+    <div class="reqs">
+      <div><span>Processor</span>64-bit (x86-64), 2 cores</div>
+      <div><span>Memory</span>4 GB, 8 GB recommended</div>
+      <div><span>Storage</span>20 GB or more</div>
+      <div><span>Firmware</span>UEFI or legacy BIOS, Secure Boot off</div>
+    </div>
+  </section>
+
+  <section id="faq" class="faq">
+    <div class="section-head">
+      <p class="eyebrow">Questions</p>
+      <h2>Good to know.</h2>
+    </div>
+    <details><summary>Can I try it without installing?</summary><p>Yes. Starting from the USB stick runs the whole system without touching your disk. Nothing is changed until you choose <em>Install midnightOS</em> and confirm.</p></details>
+    <details><summary>Will it keep Windows?</summary><p>Not in this preview. Setup installs midnightOS on the whole disk you pick. Use a spare PC or a second disk, and back up first.</p></details>
+    <details><summary>Is it stable?</summary><p>It's a Developer Preview: for testing and feedback, not your only PC. Expect rough edges and updates.</p></details>
+    <details><summary>Why turn off Secure Boot?</summary><p>The preview's boot loader isn't signed yet. Signed builds are planned; until then, Secure Boot has to be off for the PC to start it.</p></details>
+    <details><summary>Can it run my apps?</summary><p>It runs Linux apps from Debian, Flatpak apps, and many Windows programs through a compatibility layer. Some apps and games won't work.</p></details>
+  </section>
+</main>
+
+<footer>
+  <div class="foot">
+    <a class="brand" href="#top"><img src="assets/logo-64.png" alt="" width="24" height="24"><span>midnightOS</span></a>
+    <p>Built on Debian and other free and open-source software. midnightOS is an independent project and isn't affiliated with or endorsed by any other operating system maker. All product names belong to their owners.</p>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lb-close" aria-label="Close">×</button>
+  <img alt="">
+</div>
+
+<script src="assets/site.js"></script>
+</body>
+</html>
