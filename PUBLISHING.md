@@ -48,8 +48,11 @@ SourceForge (free, with mirrors). Then:
 Setup reads a `release.json` from the site that lists where to get the ISO.
 
 1. Create `website/site-config.txt` with one line: `https://NAME.github.io/REPO`
-2. Make `release.json` for the single ISO file and put it next to `index.html`:
-   `python3 tools/split-release.py ISO out --single-url ISO-ADDRESS` (this doesn't split the ISO).
+2. Split the ISO into 3 parts and make `release.json`:
+   `python3 tools/split-release.py ISO out --base-url https://github.com/NAME/REPO/releases/download/TAG`
+   Upload `out/*.part1..3` to that GitHub release (each part is about 1 GB, under the 2 GB limit) and
+   put `out/release.json` next to `index.html`. For an ISO hosted as one file instead:
+   `python3 tools/split-release.py ISO out --single-url ISO-ADDRESS`.
 3. Run `website/downloader/build.cmd` on Windows. It writes `website/downloads/midnightOS-Setup.exe`.
 4. Remove `downloads/` from `.gitignore`, swap Setup's "Coming soon" button for a link to
    `downloads/midnightOS-Setup.exe` in `tools/make-site.py`, rerun it and upload.

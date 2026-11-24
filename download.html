@@ -27,32 +27,38 @@
 <main id="main">
 <section class="page-head"><div class="container"><p class="crumbs"><a href="index.html">midnightOS</a> › Download</p>
   <h1>Download midnightOS</h1>
-  <p>Get the Developer Preview to try midnightOS from a USB stick or install it on a PC.</p>
+  <p>Get the Developer Preview and install it from Windows.</p>
 </div></section>
 <section class="band">
   <div class="container narrow">
     <div class="release-head">
-      <div><h2>midnightOS 0.9 Developer Preview</h2><p>Build 951121202612_Dev-20261117-2141</p></div>
-      <span class="tag">Coming soon</span>
+      <div><h2>midnightOS 0.9 Developer Preview</h2><p>Build 951121202612_Dev-20261124-1939</p></div>
+      <span class="tag">Developer Preview</span>
     </div>
     <div class="dl-row">
-      <div><h3>Disc image (ISO)</h3><p>For Intel and AMD 64-bit PCs. Write it to a USB stick to try or install midnightOS.</p><p class="meta">ISO · about 3.0 GB</p></div>
-      <span class="btn btn-disabled" aria-disabled="true">Coming soon</span>
+      <div><h3>midnightOS Setup for Windows</h3><p>The easiest way. Setup downloads midnightOS in 3 parts at the same time (keep using your PC, it works in the background), joins them into the disc image, checks it, then writes it to a USB stick for you. Start your PC from the stick and select <b>Install midnightOS</b>: keep Windows next to it, or replace it.</p><p class="meta">midnightOS-Setup.exe · 112 KB · Windows 10 or 11</p></div>
+      <a class="btn btn-primary" href="downloads/midnightOS-Setup.exe" download>Download Setup</a>
     </div>
     <div class="dl-row">
-      <div><h3>midnightOS Setup for Windows</h3><p>A small Windows app that gets the disc image and can write it to a USB stick.</p><p class="meta">Windows 10 or 11</p></div>
-      <span class="btn btn-disabled" aria-disabled="true">Coming soon</span>
+      <div><h3>Disc image (ISO) in 3 parts</h3><p>For people who'd rather do it by hand. Download all 3 parts into one folder, then join them in Command Prompt:</p>
+        <p><code>copy /b midnightOS-951121202612_Dev-20261124-1939.iso.part1 + midnightOS-951121202612_Dev-20261124-1939.iso.part2 + midnightOS-951121202612_Dev-20261124-1939.iso.part3 midnightOS-951121202612_Dev-20261124-1939.iso</code></p>
+        <p class="meta">ISO · about 3.0 GB · SHA-256 42fc9e8416ae818039a713a2a3cd18da325b9eb36975955a67d5787167b9296b</p></div>
+      <div class="btn-row">
+        <a class="btn btn-outline" href="https://github.com/KEPT-KELVE/Midnight/releases/download/dev-20261124-1939/midnightOS-951121202612_Dev-20261124-1939.iso.part1">Part 1</a>
+        <a class="btn btn-outline" href="https://github.com/KEPT-KELVE/Midnight/releases/download/dev-20261124-1939/midnightOS-951121202612_Dev-20261124-1939.iso.part2">Part 2</a>
+        <a class="btn btn-outline" href="https://github.com/KEPT-KELVE/Midnight/releases/download/dev-20261124-1939/midnightOS-951121202612_Dev-20261124-1939.iso.part3">Part 3</a>
+      </div>
     </div>
     <div class="dl-links">
+      <a class="more" href="install.html">How to install</a>
       <a class="more" href="release-notes.html">Release notes</a>
       <a class="more" href="specs.html#requirements">System requirements</a>
-      <a class="more" href="install.html">How to install</a>
     </div>
   </div>
 </section>
 <section class="band grey tight">
   <div class="container narrow">
-    <p class="notice info">The Developer Preview is for testing. Install it on a spare PC or a second disk, not the PC you rely on every day.</p>
+    <p class="notice info">The Developer Preview is for testing. Back up your files first, and if you keep Windows next to it, turn off BitLocker in Windows before you start. Windows may warn that Setup is from an unknown publisher, because it isn't signed yet: select <b>More info › Run anyway</b>.</p>
   </div>
 </section>
 </main>
@@ -74,7 +80,7 @@
     </div>
     <div class="foot-bottom">
       <span>English (United States)</span>
-      <span>midnightOS 0.9 Developer Preview · Build 951121202612_Dev-20261117-2141</span>
+      <span>midnightOS 0.9 Developer Preview · Build 951121202612_Dev-20261124-1939</span>
       <span>© 2026 midnightOS project</span>
     </div>
   </div>

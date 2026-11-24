@@ -1,0 +1,23 @@
+{
+  "name": "midnightOS-951121202612_Dev-20261124-1939.iso",
+  "version": "Developer Preview",
+  "size": 3006056448,
+  "sha256": "42fc9e8416ae818039a713a2a3cd18da325b9eb36975955a67d5787167b9296b",
+  "parts": [
+    {
+      "url": "https://github.com/KEPT-KELVE/Midnight/releases/download/dev-20261124-1939/midnightOS-951121202612_Dev-20261124-1939.iso.part1",
+      "size": 1003487232,
+      "sha256": "7a2c3eeabe7084b0f44b7653e0146ce309eb9c9bedc11122239ac4802f119277"
+    },
+    {
+      "url": "https://github.com/KEPT-KELVE/Midnight/releases/download/dev-20261124-1939/midnightOS-951121202612_Dev-20261124-1939.iso.part2",
+      "size": 1003487232,
+      "sha256": "dc2e9f1ac475133af4b4df05d195168046b790ed989e0f09bf2110db8b38277b"
+    },
+    {
+      "url": "https://github.com/KEPT-KELVE/Midnight/releases/download/dev-20261124-1939/midnightOS-951121202612_Dev-20261124-1939.iso.part3",
+      "size": 999081984,
+      "sha256": "58b7e2a1d72f09f0ec13bc46181782cfa5b2e4ed53d2debeee8a631fc4f2c99e"
+    }
+  ]
+}
