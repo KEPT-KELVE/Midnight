@@ -1,8 +1,11 @@
-// midnightOS Setup for Windows: downloads the midnightOS ISO and can write it to a USB stick.
+// midnightOS Setup for Windows: downloads the midnightOS ISO and writes it to a USB stick.
 //
-//   1. You choose a folder.  2. It downloads the ISO (in parts, as GitHub allows 2 GB per file),
-//   joins them and checks the SHA-256.  3. Close setup, or Flash to USB (asks for administrator
-//   rights, erases the stick you pick, writes the ISO and checks it).
+//   1. You choose a folder.  2. It downloads the ISO's three parts at the same time (in the background:
+//   minimise it to the tray), joins them into the ISO and checks the SHA-256.  3. It asks whether to
+//   flash it now: Flash to USB asks for administrator rights, erases the stick you pick, writes the ISO
+//   and checks it.
+//
+// "--render FOLDER" saves a picture of each page (for checking the layout) and exits.
 //
 // Build (no Visual Studio needed; uses the C# compiler that ships with Windows):
 //   website\downloader\build.cmd [manifest URL]
@@ -38,7 +41,7 @@ namespace Midnight
         public const string MANIFEST_URL = "@MANIFEST_URL@";
     }
 
-    public class Part { public string url { get; set; } public long size { get; set; } }
+    public class Part { public string url { get; set; } public long size { get; set; } public string sha256 { get; set; } }
     public class Release
     {
         public string name { get; set; }
@@ -46,78 +49,121 @@ namespace Midnight
         public long size { get; set; }
         public string sha256 { get; set; }
         public List<Part> parts { get; set; }
+        public string source;          // where release.json came from: part addresses may be relative to it
     }
 
     // The download itself (used by the window, and by "--test-download URL FOLDER" without a window).
+    //
+    // The ISO is published in parts (three, about 1 GB each). All parts download at the same time, each into
+    // its own file next to the ISO ("NAME.part1" ...), so a stopped download continues where each part was.
+    // A part with a published SHA-256 is checked as soon as it's complete and fetched again if it's damaged.
+    // Then the parts are joined into the ISO (part 1 is renamed and the others appended, so only the ISO's
+    // size plus one part is ever needed on disk) and the whole ISO's SHA-256 is checked on the way.
     static class Downloader
     {
         public static Release Fetch(string manifestUrl)
         {
             ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072; // TLS 1.2
+            ServicePointManager.DefaultConnectionLimit = 16;
             string json;
-            using (var wc = new WebClient()) { wc.Headers["User-Agent"] = "midnightOS-Setup"; wc.Encoding = Encoding.UTF8; json = wc.DownloadString(manifestUrl); }
+            if (File.Exists(manifestUrl)) json = File.ReadAllText(manifestUrl, Encoding.UTF8);
+            else using (var wc = new WebClient()) { wc.Headers["User-Agent"] = "midnightOS-Setup"; wc.Encoding = Encoding.UTF8; json = wc.DownloadString(manifestUrl); }
             var release = new JavaScriptSerializer().Deserialize<Release>(json);
             if (release == null || release.parts == null || release.parts.Count == 0 || string.IsNullOrEmpty(release.name)) throw new Exception("The release information is incomplete.");
             if (release.name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0) throw new Exception("The release has an unusable file name.");
+            long sum = 0;
+            foreach (var p in release.parts) sum += p.size;
+            if (sum != release.size) throw new Exception("The release information doesn't add up (the parts aren't the size of the ISO).");
+            release.source = File.Exists(manifestUrl) ? new Uri(Path.GetFullPath(manifestUrl)).AbsoluteUri : manifestUrl;
             return release;
         }
 
-        // progress(bytesDone, partNumber, bytesPerSecond); returns the finished file's path.
-        public static string Download(Release release, string folder, Action<long, int, double> progress, Action<double> checking, Func<bool> cancelled)
+        static string Address(Release release, Part part)
+        {
+            Uri absolute;
+            if (Uri.TryCreate(part.url, UriKind.Absolute, out absolute)) return part.url;
+            return new Uri(new Uri(release.source), part.url).AbsoluteUri;     // "name.iso.part1" next to release.json
+        }
+
+        public static string PartFile(string target, int index) { return target + ".part" + (index + 1); }
+
+        // progress(bytesDone, partsFinished, bytesPerSecond); joining(fraction); returns the finished ISO's path.
+        public static string Download(Release release, string folder, Action<long, int, double> progress, Action<double> joining, Func<bool> cancelled)
         {
             string target = Path.Combine(folder, release.name);
-            string temp = target + ".download";
-            long have = File.Exists(temp) ? new FileInfo(temp).Length : 0;
-            if (have > release.size) { File.Delete(temp); have = 0; }
-            var clock = Stopwatch.StartNew();
-            long startedAt = have;
-            using (var output = new FileStream(temp, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read))
+            int count = release.parts.Count;
+            var done = new long[count];
+            var finished = new bool[count];
+            long already = 0, biggest = 0;
+            for (int p = 0; p < count; p++)
             {
-                output.Seek(have, SeekOrigin.Begin);
-                long offset = 0;
-                var buffer = new byte[1 << 20];
-                for (int p = 0; p < release.parts.Count; p++)
+                biggest = Math.Max(biggest, release.parts[p].size);
+                string file = PartFile(target, p);
+                if (File.Exists(file) && new FileInfo(file).Length == release.parts[p].size) { finished[p] = true; done[p] = release.parts[p].size; }
+                else if (File.Exists(file + ".download")) done[p] = Math.Min(new FileInfo(file + ".download").Length, release.parts[p].size);
+                already += done[p];
+            }
+            if (File.Exists(target + ".download")) File.Delete(target + ".download");   // a join that was interrupted
+            long need = release.size - already + biggest + (64L << 20);
+            long free = new DriveInfo(Path.GetPathRoot(Path.GetFullPath(folder))).AvailableFreeSpace;
+            if (free < need) throw new IOException("There isn't enough free space in that folder: midnightOS needs " + MainForm.Size(need) + " free and there's " + MainForm.Size(free) + ".");
+
+            Exception failure = null;
+            bool stop = false;
+            var threads = new List<Thread>();
+            for (int p = 0; p < count; p++)
+            {
+                if (finished[p]) continue;
+                int index = p;
+                var thread = new Thread(delegate()
                 {
-                    Part part = release.parts[p];
-                    long partEnd = offset + part.size;
-                    if (have >= partEnd) { offset = partEnd; continue; }
-                    long skip = have - offset;
-                    var req = (HttpWebRequest)WebRequest.Create(part.url);
-                    req.UserAgent = "midnightOS-Setup";
-                    req.AllowAutoRedirect = true;
-                    req.Timeout = 30000; req.ReadWriteTimeout = 60000;
-                    if (skip > 0) req.AddRange(skip);
-                    using (var resp = (HttpWebResponse)req.GetResponse())
-                    using (var input = resp.GetResponseStream())
-                    {
-                        if (skip > 0 && resp.StatusCode != HttpStatusCode.PartialContent)
-                        {   // the server sent the whole part: skip what we already have
-                            long left = skip;
-                            while (left > 0) { int n = input.Read(buffer, 0, (int)Math.Min(buffer.Length, left)); if (n <= 0) throw new IOException("Download interrupted."); left -= n; }
-                        }
-                        int read;
-                        long lastUi = -1000;
-                        while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                    try { FetchPart(release, index, PartFile(target, index), delegate(long d) { Interlocked.Exchange(ref done[index], d); }, delegate { return stop; }); finished[index] = true; }
+                    catch (Exception ex) { lock (threads) { if (failure == null) failure = ex; } stop = true; }
+                });
+                thread.IsBackground = true;
+                threads.Add(thread);
+                thread.Start();
+            }
+            var clock = Stopwatch.StartNew();
+            while (true)
+            {
+                bool running = false;
+                foreach (var t in threads) if (t.IsAlive) running = true;
+                long sum = 0; int complete = 0;
+                for (int p = 0; p < count; p++) { sum += Interlocked.Read(ref done[p]); if (finished[p]) complete++; }
+                progress(sum, complete, (sum - already) / Math.Max(0.5, clock.Elapsed.TotalSeconds));
+                if (!running) break;
+                if (cancelled()) stop = true;
+                Thread.Sleep(200);
+            }
+            if (cancelled()) throw new OperationCanceledException();
+            if (failure != null) throw failure;
+
+            // Join: part 1 becomes the ISO, the others are appended (and removed) one by one.
+            string temp = target + ".download";
+            File.Move(PartFile(target, 0), temp);
+            string hash;
+            using (var sha = SHA256.Create())
+            using (var output = new FileStream(temp, FileMode.Open, FileAccess.ReadWrite, FileShare.None, 1 << 20))
+            {
+                var buffer = new byte[4 << 20];
+                long seen = 0; int n;
+                while ((n = output.Read(buffer, 0, buffer.Length)) > 0) { sha.TransformBlock(buffer, 0, n, null, 0); seen += n; joining((double)seen / release.size); }
+                for (int p = 1; p < count; p++)
+                {
+                    string file = PartFile(target, p);
+                    using (var input = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read, 1 << 20))
+                        while ((n = input.Read(buffer, 0, buffer.Length)) > 0)
                         {
                             if (cancelled()) throw new OperationCanceledException();
-                            long room = partEnd - have;
-                            if (read > room) read = (int)room;          // never write past this part
-                            output.Write(buffer, 0, read);
-                            have += read;
-                            if (clock.ElapsedMilliseconds - lastUi > 200)
-                            {
-                                lastUi = clock.ElapsedMilliseconds;
-                                progress(have, p + 1, (have - startedAt) / Math.Max(0.5, clock.Elapsed.TotalSeconds));
-                            }
-                            if (have >= partEnd) break;
+                            sha.TransformBlock(buffer, 0, n, null, 0); output.Write(buffer, 0, n); seen += n; joining((double)seen / release.size);
                         }
-                    }
-                    if (have != partEnd) throw new IOException("Part " + (p + 1) + " ended early. Start again to continue.");
-                    offset = partEnd;
+                    File.Delete(file);
                 }
+                sha.TransformFinalBlock(buffer, 0, 0);
+                hash = Hex(sha.Hash);
             }
-            if (new FileInfo(temp).Length != release.size) throw new IOException("The download is incomplete. Start it again to continue where it stopped.");
-            string hash = MainForm.Sha256(temp, checking);
+            if (new FileInfo(temp).Length != release.size) { File.Delete(temp); throw new IOException("The joined file has the wrong size. Please download it again."); }
             if (!string.IsNullOrEmpty(release.sha256) && !hash.Equals(release.sha256, StringComparison.OrdinalIgnoreCase))
             {
                 File.Delete(temp);
@@ -127,17 +173,106 @@ namespace Midnight
             File.Move(temp, target);
             return target;
         }
+
+        // One part, with up to four tries; resumes from what's already in FILE.download.
+        static void FetchPart(Release release, int index, string file, Action<long> report, Func<bool> stop)
+        {
+            Part part = release.parts[index];
+            string temp = file + ".download";
+            var buffer = new byte[1 << 20];
+            for (int attempt = 1; ; attempt++)
+            {
+                try
+                {
+                    long have = File.Exists(temp) ? new FileInfo(temp).Length : 0;
+                    if (have > part.size) { File.Delete(temp); have = 0; }
+                    report(have);
+                    var address = new Uri(Address(release, part));
+                    if (have < part.size && address.IsFile)
+                    {   // parts in a folder (a USB drive, a network share): copy from where we stopped
+                        using (var input = new FileStream(address.LocalPath, FileMode.Open, FileAccess.Read, FileShare.Read, 1 << 20))
+                        using (var output = new FileStream(temp, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read))
+                        {
+                            input.Seek(have, SeekOrigin.Begin);
+                            output.SetLength(have);
+                            output.Seek(have, SeekOrigin.Begin);
+                            int read;
+                            while (have < part.size && (read = input.Read(buffer, 0, (int)Math.Min(buffer.Length, part.size - have))) > 0)
+                            {
+                                if (stop()) throw new OperationCanceledException();
+                                output.Write(buffer, 0, read);
+                                have += read;
+                                report(have);
+                            }
+                        }
+                    }
+                    else if (have < part.size)
+                    {
+                        var req = (HttpWebRequest)WebRequest.Create(address);
+                        req.UserAgent = "midnightOS-Setup";
+                        req.AllowAutoRedirect = true;
+                        req.Timeout = 30000; req.ReadWriteTimeout = 60000;
+                        if (have > 0) req.AddRange(have);
+                        using (var resp = (HttpWebResponse)req.GetResponse())
+                        using (var input = resp.GetResponseStream())
+                        using (var output = new FileStream(temp, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read))
+                        {
+                            if (have > 0 && resp.StatusCode != HttpStatusCode.PartialContent) have = 0;   // the server sent it all again
+                            output.SetLength(have);
+                            output.Seek(have, SeekOrigin.Begin);
+                            int read;
+                            while (have < part.size && (read = input.Read(buffer, 0, (int)Math.Min(buffer.Length, part.size - have))) > 0)
+                            {
+                                if (stop()) throw new OperationCanceledException();
+                                output.Write(buffer, 0, read);
+                                have += read;
+                                report(have);
+                            }
+                        }
+                    }
+                    if (have != part.size) throw new IOException("Part " + (index + 1) + " ended early.");
+                    if (!string.IsNullOrEmpty(part.sha256))
+                    {
+                        string sum;
+                        using (var sha = SHA256.Create()) using (var f = File.OpenRead(temp)) sum = Hex(sha.ComputeHash(f));
+                        if (!sum.Equals(part.sha256, StringComparison.OrdinalIgnoreCase))
+                        {
+                            File.Delete(temp);
+                            report(0);
+                            throw new IOException("Part " + (index + 1) + " arrived damaged.");
+                        }
+                    }
+                    if (File.Exists(file)) File.Delete(file);
+                    File.Move(temp, file);
+                    return;
+                }
+                catch (OperationCanceledException) { throw; }
+                catch (Exception)
+                {
+                    if (attempt >= 4 || stop()) throw;
+                    Thread.Sleep(2000 * attempt);
+                }
+            }
+        }
+
+        public static string Hex(byte[] hash)
+        {
+            var sb = new StringBuilder();
+            foreach (byte b in hash) sb.Append(b.ToString("x2"));
+            return sb.ToString();
+        }
     }
 
     static class Theme
     {
-        public static readonly Color Back = Color.FromArgb(11, 10, 18);
-        public static readonly Color Card = Color.FromArgb(22, 20, 34);
-        public static readonly Color Line = Color.FromArgb(48, 44, 70);
-        public static readonly Color Text = Color.FromArgb(244, 242, 255);
-        public static readonly Color Muted = Color.FromArgb(165, 160, 190);
-        public static readonly Color Accent = Color.FromArgb(106, 0, 255);
-        public static readonly Color Danger = Color.FromArgb(255, 120, 110);
+        public static readonly Color Back = Color.FromArgb(250, 250, 253);
+        public static readonly Color Card = Color.FromArgb(240, 239, 246);
+        public static readonly Color Line = Color.FromArgb(214, 212, 226);
+        public static readonly Color Text = Color.FromArgb(27, 26, 34);
+        public static readonly Color Muted = Color.FromArgb(96, 94, 114);
+        public static readonly Color Accent = Color.FromArgb(36, 0, 64);              // #240040, midnight purple
+        public static readonly Color OnAccent = Color.White;
+        public static readonly Color Danger = Color.FromArgb(196, 43, 28);
         public static Font Font(float size, FontStyle style) { return new Font("Segoe UI", size, style); }
     }
 
@@ -150,13 +285,14 @@ namespace Midnight
             FlatAppearance.BorderSize = primary ? 0 : 1;
             FlatAppearance.BorderColor = Theme.Line;
             BackColor = primary ? Theme.Accent : Theme.Card;
-            ForeColor = Theme.Text;
+            ForeColor = primary ? Theme.OnAccent : Theme.Text;
             Font = Theme.Font(10f, FontStyle.Bold);
             Height = 38;
             Width = 150;
             Cursor = Cursors.Hand;
             Color normal = BackColor;
-            EnabledChanged += delegate { BackColor = Enabled ? normal : Theme.Card; Cursor = Enabled ? Cursors.Hand : Cursors.Default; };
+            Color ink = ForeColor;
+            EnabledChanged += delegate { BackColor = Enabled ? normal : Theme.Card; ForeColor = Enabled ? ink : Theme.Muted; Cursor = Enabled ? Cursors.Hand : Cursors.Default; };
         }
     }
 
@@ -169,7 +305,7 @@ namespace Midnight
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             using (var b = new SolidBrush(Theme.Line)) e.Graphics.FillRectangle(b, 0, 0, Width, Height);
-            using (var b = new LinearGradientBrush(new Rectangle(0, 0, Math.Max(1, Width), Height), Color.FromArgb(150, 90, 255), Theme.Accent, 0f))
+            using (var b = new LinearGradientBrush(new Rectangle(0, 0, Math.Max(1, Width), Height), Color.FromArgb(92, 33, 143), Theme.Accent, 0f))
                 e.Graphics.FillRectangle(b, 0, 0, (int)(Width * value), Height);
         }
     }
@@ -206,6 +342,7 @@ namespace Midnight
                     cancel = true;
                 }
             };
+            SetUpTray();
             int flash = Array.IndexOf(args, "--flash");
             if (flash >= 0 && flash + 1 < args.Length) { isoPath = args[flash + 1]; ShowFlash(); }
             else ShowWelcome();
@@ -244,21 +381,21 @@ namespace Midnight
         void ShowWelcome()
         {
             NewPage();
-            Title("Get midnightOS Developer Preview", 96);
-            Body("Choose where to save midnightOS. It's one disc image (ISO), about 3 GB. Afterwards you can write it to a USB stick right here.", 146, 48);
-            var where = new TextBox { Location = new Point(36, 216), Size = new Size(470, 30), Font = Theme.Font(11f, FontStyle.Regular), BackColor = Theme.Card, ForeColor = Theme.Text, BorderStyle = BorderStyle.FixedSingle };
+            Title("Get midnightOS Consumer Preview", 96);
+            Body("Choose where to save midnightOS. It arrives in 3 parts that download at the same time and are then joined into one disc image (ISO), about 3 GB. Afterwards Setup writes it to a USB stick for you.", 146, 66);
+            var where = new TextBox { Location = new Point(36, 222), Size = new Size(470, 30), Font = Theme.Font(11f, FontStyle.Regular), BackColor = Theme.Card, ForeColor = Theme.Text, BorderStyle = BorderStyle.FixedSingle };
             int given = Array.IndexOf(args, "--folder");
             where.Text = given >= 0 && given + 1 < args.Length ? args[given + 1]
                 : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
             page.Controls.Add(where);
-            var browse = new FlatButton("Browse…", false) { Location = new Point(514, 212), Width = 130 };
+            var browse = new FlatButton("Browse…", false) { Location = new Point(514, 218), Width = 130 };
             browse.Click += delegate
             {
                 using (var d = new FolderBrowserDialog { Description = "Where should the midnightOS ISO go?", SelectedPath = where.Text, ShowNewFolderButton = true })
                     if (d.ShowDialog(this) == DialogResult.OK) where.Text = d.SelectedPath;
             };
             page.Controls.Add(browse);
-            var info = Body("", 260, 60);
+            var info = Body("", 266, 60);
             Btn("Close", false, 340, delegate { Close(); });
             EventHandler go = delegate
             {
@@ -279,8 +416,11 @@ namespace Midnight
         {
             int i = Array.IndexOf(args, "--manifest");
             if (i >= 0 && i + 1 < args.Length) return args[i + 1];
-            string file = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "manifest-url.txt");
+            string here = Path.GetDirectoryName(Application.ExecutablePath);
+            string file = Path.Combine(here, "manifest-url.txt");
             if (File.Exists(file)) return File.ReadAllText(file).Trim();
+            string local = Path.Combine(here, "release.json");       // parts handed out on a USB drive or share
+            if (File.Exists(local)) return local;
             return Config.MANIFEST_URL;
         }
 
@@ -300,19 +440,33 @@ namespace Midnight
                 {
                     release = Downloader.Fetch(ManifestUrl());
                     Ui(delegate { title.Text = "Downloading midnightOS " + release.version; });
+                    long lastJoin = -1;
                     isoPath = Downloader.Download(release, folder,
-                        delegate(long done, int part, double speed)
+                        delegate(long done, int parts, double speed)
                         {
                             Ui(delegate
                             {
                                 bar.Value = (double)done / release.size;
                                 status.Text = string.Format("{0} of {1}", Size(done), Size(release.size));
-                                detail.Text = string.Format("{0}/s · about {1} left · part {2} of {3}", Size((long)speed), Eta((release.size - done) / Math.Max(1, speed)), part, release.parts.Count);
+                                string partsText = release.parts.Count > 1
+                                    ? string.Format(" · {0} parts at once, {1} of {0} done", release.parts.Count, parts) : "";
+                                detail.Text = string.Format("{0}/s · about {1} left{2}\nYou can minimise this window: midnightOS keeps downloading in the background.",
+                                                            Size((long)speed), Eta((release.size - done) / Math.Max(1, speed)), partsText);
+                                Tray(string.Format("Downloading midnightOS: {0:0}%", 100.0 * done / release.size));
                             });
                         },
                         delegate(double f)
                         {
-                            Ui(delegate { status.Text = "Checking the download…"; detail.Text = "Making sure every byte arrived as published (SHA-256)."; stop.Enabled = false; bar.Value = f; });
+                            long step = (long)(f * 200);
+                            if (step == lastJoin) return;
+                            lastJoin = step;
+                            Ui(delegate
+                            {
+                                status.Text = release.parts.Count > 1 ? "Putting the parts together…" : "Checking the download…";
+                                detail.Text = "Joining them into one disc image and making sure every byte arrived as published (SHA-256).";
+                                stop.Enabled = false; bar.Value = f;
+                                Tray("Putting midnightOS together…");
+                            });
                         },
                         delegate { return cancel; });
                     Ui(ShowDone);
@@ -359,11 +513,77 @@ namespace Midnight
         void ShowDone()
         {
             NewPage();
-            Title("midnightOS is downloaded", 96);
-            Body("Saved to:\n" + isoPath + "\n\nTo try or install midnightOS, write it to a USB stick (8 GB or bigger), then start your PC from the stick.", 146, 120);
+            Title("midnightOS is ready. Flash it now?", 96);
+            Body("The parts were downloaded, joined and checked. Your disc image is here:\n" + isoPath +
+                 "\n\nWrite it to a USB stick (8 GB or bigger) to start or install midnightOS from it. Setup erases the stick you pick, writes midnightOS and checks it.", 146, 130);
             Btn("Show in folder", false, 36, delegate { Process.Start("explorer.exe", "/select,\"" + isoPath + "\""); });
-            Btn("Close setup", false, 340, delegate { Close(); });
-            Btn("Flash to USB", true, 494, delegate { StartFlash(); });
+            Btn("Not now", false, 340, delegate { Close(); });
+            var flash = Btn("Flash to USB", true, 494, delegate { StartFlash(); });
+            AcceptButton = flash;
+            ActiveControl = flash;
+            Tray(null);
+            if (WindowState == FormWindowState.Minimized || !Visible)
+            {
+                tray.Visible = true;
+                tray.ShowBalloonTip(15000, "midnightOS is downloaded", "Click here to write it to a USB stick.", ToolTipIcon.Info);
+            }
+            else Activate();
+        }
+
+        public void RenderPages(string folder)
+        {
+            Directory.CreateDirectory(folder);
+            StartPosition = FormStartPosition.Manual;
+            Location = new Point(-4000, -4000);
+            ShowInTaskbar = false;
+            Show();
+            Action<string> save = delegate(string name)
+            {
+                for (int i = 0; i < 5; i++) { Application.DoEvents(); Thread.Sleep(30); }
+                using (var bmp = new Bitmap(ClientSize.Width, ClientSize.Height))
+                {
+                    page.DrawToBitmap(bmp, new Rectangle(Point.Empty, ClientSize));
+                    bmp.Save(Path.Combine(folder, name + ".png"), System.Drawing.Imaging.ImageFormat.Png);
+                }
+            };
+            ShowWelcome(); save("1-welcome");
+            NewPage();
+            Title("Downloading midnightOS Consumer Preview", 96);
+            Body("1.27 GB of 2.80 GB", 146, 26);
+            page.Controls.Add(new SlimBar { Location = new Point(36, 196), Width = 608, Value = 0.45 });
+            Body("11.8 MB/s · about 2 min left · 3 parts at once, 0 of 3 done\nYou can minimise this window: midnightOS keeps downloading in the background.", 214, 48);
+            Btn("Cancel", false, 494, delegate { });
+            save("2-download");
+            isoPath = @"C:\Users\You\Downloads\midnightOS-951121202612_Dev-20261124.iso";
+            ShowDone(); save("3-done");
+            ShowFlash(); save("4-flash");
+        }
+
+        // ---------- the tray: keeps downloading while the window is minimised ----------
+        NotifyIcon tray;
+        void SetUpTray()
+        {
+            tray = new NotifyIcon { Icon = Icon ?? SystemIcons.Application, Text = "midnightOS Setup", Visible = false };
+            EventHandler restore = delegate { Show(); WindowState = FormWindowState.Normal; Activate(); tray.Visible = false; };
+            tray.DoubleClick += restore;
+            tray.BalloonTipClicked += restore;
+            tray.ContextMenu = new ContextMenu(new[] { new MenuItem("Show midnightOS Setup", restore) });
+            Resize += delegate
+            {
+                if (WindowState == FormWindowState.Minimized && worker != null && worker.IsAlive)
+                {
+                    Hide();
+                    tray.Visible = true;
+                    tray.ShowBalloonTip(5000, "Still downloading", "midnightOS keeps downloading in the background. It tells you when it's ready.", ToolTipIcon.Info);
+                }
+            };
+            FormClosed += delegate { tray.Visible = false; tray.Dispose(); };
+        }
+        void Tray(string text)
+        {
+            if (tray == null) return;
+            text = text ?? "midnightOS Setup";
+            tray.Text = text.Length > 63 ? text.Substring(0, 63) : text;
         }
 
         void ShowError(string title, string text)
@@ -565,6 +785,13 @@ namespace Midnight
         [STAThread]
         static int Main(string[] args)
         {
+            if (args.Length == 2 && args[0] == "--render")
+            {   // a picture of each page, to check the layout
+                Application.EnableVisualStyles();
+                var form = new MainForm(new string[0]);
+                form.RenderPages(args[1]);
+                return 0;
+            }
             if (args.Length == 3 && args[0] == "--test-download")
             {   // headless check of the download path: writes a log into the folder
                 string log = Path.Combine(args[2], "midnight-setup-test.log");

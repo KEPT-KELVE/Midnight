@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>How to install - midnightOS</title>
-<meta name="description" content="How to install midnightOS from a USB stick.">
+<meta name="description" content="How to install midnightOS from Windows with setup.exe.">
 <link rel="icon" type="image/png" href="assets/logo-64.png">
 <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -12,7 +12,7 @@
 <a class="skip" href="#main">Skip to main content</a>
 <header class="site-header">
   <div class="container">
-    <a class="brand" href="index.html"><img src="assets/logo-64.png" alt=""><b>midnightOS</b><i class="sep"></i><span>Developer Preview</span></a>
+    <a class="brand" href="index.html"><img src="assets/logo-64.png" alt=""><b>midnightOS</b><i class="sep"></i><span>Release Preview</span></a>
     <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     <nav class="site-nav" aria-label="midnightOS">
       <a href="index.html">Overview</a>
@@ -27,30 +27,47 @@
 <main id="main">
 <section class="page-head"><div class="container"><p class="crumbs"><a href="index.html">midnightOS</a> › How to install</p>
   <h1>How to install midnightOS</h1>
-  <p>Try midnightOS from a USB stick, then install it on your PC.</p>
+  <p>Install midnightOS from Windows with setup.exe. It takes about 20 minutes.</p>
 </div></section>
-<section class="band">
+<section class="band" id="replace-windows">
   <div class="container narrow">
-    <p class="notice">Installing erases everything on the disk you choose, including any other operating system. Back up your files first.</p>
+    <p class="notice">Setup removes Windows, your apps and every account's AppData folder, and it can't be undone. Your C:\Users folder (Desktop, Documents, Pictures and so on) is kept and shows up in midnightOS as <b>Windows files</b>. Back up anything important first.</p>
     <ol class="steps">
-      <li><h3>Check your PC</h3><p>Make sure your PC meets the <a href="specs.html#requirements">system requirements</a>, and have a USB stick of 4 GB or more ready. Everything on the stick will be replaced.</p></li>
+      <li><h3>Check your PC</h3><p>You need a PC that runs Windows 10 or 11 and meets the <a href="specs.html#requirements">system requirements</a>, with about 25 GB free on C:.</p></li>
       <li><h3>Turn off Secure Boot</h3><p>Restart and open your PC's firmware settings (often <kbd>F2</kbd>, <kbd>Del</kbd> or <kbd>Esc</kbd> while it starts). Find <b>Secure Boot</b>, turn it off, then save and exit.</p></li>
-      <li><h3>Write midnightOS to the USB stick</h3><p>Use an image writer such as balenaEtcher, Rufus (in DD mode) or Ventoy to write the midnightOS disc image to the stick.</p></li>
-      <li><h3>Start from the USB stick</h3><p>Plug in the stick, restart, and open the boot menu (often <kbd>F12</kbd>, <kbd>F11</kbd> or <kbd>Esc</kbd>). Choose the USB stick. midnightOS starts and signs you in, so you can try it right away.</p></li>
-      <li><h3>Install midnightOS</h3><p>Double-click <b>Install midnightOS</b> on the desktop.</p>
-        <ul><li>Choose the disk to install on.</li><li>Tick <b>I understand that everything on this disk will be erased</b>, then select <b>Erase and install</b>.</li>
-        <li>Wait about ten minutes, then select <b>Restart now</b> and remove the USB stick when the screen goes dark.</li></ul></li>
-      <li><h3>Set up your PC</h3><p>midnightOS starts from the disk and asks for your time zone, network, name, a PIN and, if you have a camera, face sign-in. Then you're ready.</p></li>
+      <li><h3>Turn off BitLocker</h3><p>If C: is encrypted, open <b>Settings › Privacy &amp; security › Device encryption</b> (or <b>Manage BitLocker</b> in Control Panel) and turn it off. Wait until decryption has finished.</p></li>
+      <li><h3>Open the disc image</h3><p><a href="download.html">Download midnightOS</a> with midnightOS Setup (select <b>Not now</b> when it offers the USB stick), then double-click the ISO in File Explorer. Windows opens it like a DVD.</p></li>
+      <li><h3>Run setup.exe</h3><p>Open <b>setup.exe</b> on the disc image and select <b>Yes</b> when Windows asks.</p>
+        <ul><li>Read the beta notes and what will happen, and tick that you've backed up your files.</li><li>Setup checks your PC. When it says <b>Your PC is ready</b>, select <b>Install</b>.</li>
+        <li>The screen fills with <b>Installing midnight Release Preview</b> and a progress bar. You can still cancel until your PC restarts.</li></ul></li>
+      <li><h3>Wait while it installs</h3><p>Your PC restarts, installs midnightOS, removes Windows and restarts again. Keep it switched on and plugged in.</p></li>
+      <li><h3>Set up your PC</h3><p>midnightOS asks for your time zone, network, name, a PIN and, if you have a camera, face sign-in. It also shows where your Windows files are. Then you're ready.</p></li>
     </ol>
   </div>
 </section>
-<section class="band grey" id="trouble">
+<section class="band grey">
+  <div class="container narrow prose">
+    <h2>What setup.exe needs</h2>
+    <table class="spec">
+      <tbody>
+        <tr><th scope="row">Start-up mode</th><td>UEFI, with Secure Boot turned off</td></tr>
+        <tr><th scope="row">Drive encryption</th><td>BitLocker and Device encryption turned off on C:</td></tr>
+        <tr><th scope="row">Disk</th><td>Windows on an NTFS drive on a GPT disk</td></tr>
+        <tr><th scope="row">Free space</th><td>About 25 GB free on C:</td></tr>
+      </tbody>
+    </table>
+    <p>You can also start your PC from the disc image on a USB stick and select <b>Install midnightOS</b> on the desktop. Setup can put midnightOS next to Windows (you choose which one starts each time) or erase the whole disk.</p>
+  </div>
+</section>
+<section class="band" id="trouble">
   <div class="container narrow prose">
     <h2>If something goes wrong</h2>
-    <h3>The PC doesn't start from the USB stick</h3>
-    <p>Check that Secure Boot is off, try another USB port, and write the stick again.</p>
-    <h3>The screen stays black or shows text</h3>
-    <p>Press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>F1</kbd> to return to the desktop. If the graphics driver doesn't start, midnightOS switches to a basic display driver by itself.</p>
+    <h3>Setup says it can't find the midnightOS files</h3>
+    <p>Run <b>setup.exe</b> from the opened disc image, not from a copy. If it still says this, download the disc image again.</p>
+    <h3>Setup says your PC isn't ready</h3>
+    <p>Each line says what to change, such as turning off Secure Boot or BitLocker. Fix it, then select <b>Check again</b>.</p>
+    <h3>Something went wrong during the install</h3>
+    <p>If it stops before Windows is removed, your PC restarts into Windows with nothing changed. Run <b>setup.exe</b> again and select <b>Clean up</b> to get the space back.</p>
     <h3>No Wi-Fi</h3>
     <p>Connect a network cable, or skip the network step during setup and connect later from quick settings.</p>
     <p><a class="more" href="help.html">More help</a></p>
@@ -75,7 +92,7 @@
     </div>
     <div class="foot-bottom">
       <span>English (United States)</span>
-      <span>midnightOS 0.9 Developer Preview · Build 951121202612_Dev-20261117-2141</span>
+      <span>midnightOS 0.9 Release Preview · Build 0.9_RP-20261127-2312</span>
       <span>© 2026 midnightOS project</span>
     </div>
   </div>

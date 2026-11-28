@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Release notes - midnightOS</title>
-<meta name="description" content="midnightOS Developer Preview release notes and known issues.">
+<meta name="description" content="midnightOS Release Preview release notes and known issues.">
 <link rel="icon" type="image/png" href="assets/logo-64.png">
 <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -12,7 +12,7 @@
 <a class="skip" href="#main">Skip to main content</a>
 <header class="site-header">
   <div class="container">
-    <a class="brand" href="index.html"><img src="assets/logo-64.png" alt=""><b>midnightOS</b><i class="sep"></i><span>Developer Preview</span></a>
+    <a class="brand" href="index.html"><img src="assets/logo-64.png" alt=""><b>midnightOS</b><i class="sep"></i><span>Release Preview</span></a>
     <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     <nav class="site-nav" aria-label="midnightOS">
       <a href="index.html">Overview</a>
@@ -27,41 +27,43 @@
 <main id="main">
 <section class="page-head"><div class="container"><p class="crumbs"><a href="index.html">midnightOS</a> › Release notes</p>
   <h1>Release notes</h1>
-  <p>What's new and what to know in midnightOS 0.9 Developer Preview.</p>
+  <p>What's new and what to know in midnightOS 0.9 Release Preview.</p>
 </div></section>
 <section class="band">
   <div class="container narrow prose">
     <table class="spec">
       <tbody>
-        <tr><th scope="row">Version</th><td>midnightOS 0.9 Developer Preview</td></tr>
-        <tr><th scope="row">Build</th><td>951121202612_Dev-20261117-2141</td></tr>
-        <tr><th scope="row">Status</th><td>Coming soon</td></tr>
+        <tr><th scope="row">Version</th><td>midnightOS 0.9 Release Preview</td></tr>
+        <tr><th scope="row">Build</th><td>0.9_RP-20261127-2312</td></tr>
+        <tr><th scope="row">Status</th><td>Release Preview, <a href="download.html">download now</a></td></tr>
       </tbody>
     </table>
 
     <h2 style="margin-top:48px">What's new</h2>
     <ul>
-      <li><strong>Install midnightOS:</strong> install from the USB stick onto a disk, with UEFI and legacy BIOS support.</li>
-      <li><strong>First start:</strong> a short setup for time zone, network, your name, a PIN, face sign-in and theme.</li>
-      <li><strong>Sign-in:</strong> starting from a USB stick signs in automatically; installed PCs use your PIN or face.</li>
-      <li><strong>New look:</strong> a new logo, new app icons, a new boot screen and a white loading spinner.</li>
-      <li><strong>New sounds:</strong> an original set of system sounds and new music for the Metro Browser welcome.</li>
-      <li><strong>Metro Browser:</strong> new icons throughout, a new logo, and it now installs as a regular package.</li>
-      <li><strong>Admin Approval:</strong> a clearer prompt that shows which app is asking and what it will run.</li>
+      <li><strong>Release Preview:</strong> midnightOS is now feature complete. From here on, updates bring fixes, branding and new wallpapers.</li>
+      <li><strong>New icons:</strong> every app, folder, device and file icon has been redrawn, with violet folders.</li>
+      <li><strong>Full-screen Start:</strong> a new vines and moons background, drawn in whatever Start colour you choose.</li>
+      <li><strong>Tablet mode:</strong> use full-screen Start as your home screen, without the taskbar or menu bar.</li>
+      <li><strong>Wet Glass:</strong> set how transparent the taskbar is in Settings › Personalization › Taskbar.</li>
+      <li><strong>Red Roses:</strong> the new default desktop background.</li>
+      <li><strong>Keep Windows:</strong> install from a USB stick next to Windows and choose which one starts.</li>
+      <li><strong>Optional features:</strong> extra parts of midnightOS can be switched on with a feature ID, and the system keeps its own list of IDs.</li>
     </ul>
 
     <h2>Fixed</h2>
     <ul>
-      <li>Face sign-in can now be set up from Settings without an extra password prompt.</li>
-      <li>The sign-in screen clock now follows the time zone you choose.</li>
-      <li>Start and Settings now show the name you enter during first start.</li>
-      <li>Window previews on the taskbar show the right app names.</li>
+      <li>Wallpapers that were removed no longer stay behind after an update.</li>
+      <li>The release name now reads Release Preview everywhere, including the watermark and first start.</li>
+      <li>Face sign-in can be set up from Settings without an extra password prompt.</li>
+      <li>The sign-in screen clock follows the time zone you choose.</li>
     </ul>
 
     <h2 id="known-issues">Known issues</h2>
     <ul>
       <li>Secure Boot must be turned off to start midnightOS.</li>
-      <li>Installing uses the whole disk. Installing next to another operating system isn't supported yet.</li>
+      <li>setup.exe, run from Windows, replaces Windows (you can go back for 45 days). To keep both, install from a USB stick instead.</li>
+      <li>Installing next to Windows from a USB stick needs BitLocker off, a GPT disk and a UEFI start, and Windows must have been shut down fully (not Fast Startup).</li>
       <li>Some system actions that have no approval prompt yet, such as formatting a disk in the Disks app, are refused instead of asking.</li>
       <li>English is the only language.</li>
     </ul>
@@ -86,7 +88,7 @@
     </div>
     <div class="foot-bottom">
       <span>English (United States)</span>
-      <span>midnightOS 0.9 Developer Preview · Build 951121202612_Dev-20261117-2141</span>
+      <span>midnightOS 0.9 Release Preview · Build 0.9_RP-20261127-2312</span>
       <span>© 2026 midnightOS project</span>
     </div>
   </div>

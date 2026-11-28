@@ -1,0 +1,23 @@
+{
+  "name": "midnightOS-0.9_RP-20261127-2312.iso",
+  "version": "Release Preview",
+  "size": 3619774464,
+  "sha256": "7cbc7e7ff8f7dd28afdc6793d045b39e5a51cc87d2ed0f4c488fe1b010528010",
+  "parts": [
+    {
+      "url": "https://github.com/KEPT-KELVE/Midnight/releases/download/rp-20261127-2312/midnightOS-0.9_RP-20261127-2312.iso.part1",
+      "size": 1207959552,
+      "sha256": "fd04196223dd88b0f1ef55b38a613c2bea35a5610d15c6917e718d8d4b0bf7fa"
+    },
+    {
+      "url": "https://github.com/KEPT-KELVE/Midnight/releases/download/rp-20261127-2312/midnightOS-0.9_RP-20261127-2312.iso.part2",
+      "size": 1207959552,
+      "sha256": "3b909443f749c08ed6d6891ca0d4f5674c8f2c034a4ab1236617b8dd4ae9b2f0"
+    },
+    {
+      "url": "https://github.com/KEPT-KELVE/Midnight/releases/download/rp-20261127-2312/midnightOS-0.9_RP-20261127-2312.iso.part3",
+      "size": 1203855360,
+      "sha256": "4ed61f06485c0de07d86ff3e874c2c75b8cd8bbb2dbedc7e3a2a71a28e262337"
+    }
+  ]
+}

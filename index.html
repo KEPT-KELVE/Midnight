@@ -12,7 +12,7 @@
 <a class="skip" href="#main">Skip to main content</a>
 <header class="site-header">
   <div class="container">
-    <a class="brand" href="index.html"><img src="assets/logo-64.png" alt=""><b>midnightOS</b><i class="sep"></i><span>Developer Preview</span></a>
+    <a class="brand" href="index.html"><img src="assets/logo-64.png" alt=""><b>midnightOS</b><i class="sep"></i><span>Release Preview</span></a>
     <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     <nav class="site-nav" aria-label="midnightOS">
       <a href="index.html" aria-current="page">Overview</a>
@@ -28,9 +28,9 @@
 <section class="hero">
   <div class="container">
     <h1>midnightOS</h1>
-    <p class="lead">A calm, fast desktop operating system built on Debian. The Developer Preview is coming soon.</p>
+    <p class="lead">A calm, fast desktop operating system built on Debian. The Release Preview is out now.</p>
     <div class="btn-row">
-      <a class="btn btn-primary" href="download.html">See download options</a>
+      <a class="btn btn-primary" href="download.html">Download</a>
       <a class="btn btn-outline" href="features.html">Explore features</a>
     </div>
     <div class="device"><div class="screen"><img src="assets/shots/desktop.jpg" alt="The midnightOS desktop with the taskbar at the bottom" width="1600" height="900"></div><div class="base"></div></div>
@@ -50,11 +50,15 @@
         <div class="shot"><img src="assets/shots/settings.jpg" alt="Settings in midnightOS" width="1600" height="900"></div>
       </div>
       <div class="slide showcase" hidden>
-        <div class="panel"><h3>Metro Browser</h3><p>A fast web browser with a bold tile design, its own icons and colours, private tabs and a short welcome on first run.</p><a class="more" href="features.html#apps">Learn more</a></div>
-        <div class="shot"><img src="assets/shots/metro.jpg" alt="Metro Browser in midnightOS" width="1600" height="900"></div>
+        <div class="panel"><h3>Full-screen Start</h3><p>Live tiles over a background drawn in your Start colour. Turn on tablet mode and it becomes your home screen.</p><a class="more" href="features.html#desktop">Learn more</a></div>
+        <div class="shot"><img src="assets/shots/fullstart.jpg" alt="Full-screen Start in midnightOS" width="1600" height="900"></div>
       </div>
       <div class="slide showcase" hidden>
-        <div class="panel"><h3>Install midnightOS</h3><p>Start from a USB stick, try everything, then install with a few clicks. Setup shows clear progress and takes about ten minutes.</p><a class="more" href="install.html">Learn more</a></div>
+        <div class="panel"><h3>Explorer</h3><p>Your files and folders with the new icon set, thumbnails, archives and ISO mounting.</p><a class="more" href="features.html#apps">Learn more</a></div>
+        <div class="shot"><img src="assets/shots/explorer.jpg" alt="Explorer in midnightOS" width="1600" height="900"></div>
+      </div>
+      <div class="slide showcase" hidden>
+        <div class="panel"><h3>Install midnightOS</h3><p>Start from a USB stick and install next to Windows, or open the disc image in Windows and run setup.exe to replace it and keep your files.</p><a class="more" href="install.html">Learn more</a></div>
         <div class="shot"><img src="assets/shots/setup.jpg" alt="Install midnightOS in midnightOS" width="1600" height="900"></div>
       </div>
       <div class="slide showcase" hidden>
@@ -65,8 +69,8 @@
         <div class="panel"><h3>Sign in</h3><p>Sign in with a PIN, or just look at the screen when face sign-in is set up. Your face data stays on your PC.</p><a class="more" href="features.html#security">Learn more</a></div>
         <div class="shot"><img src="assets/shots/lock.jpg" alt="Sign in in midnightOS" width="1600" height="900"></div>
       </div>
-    <div class="showcase-controls"><button class="arrow prev" aria-label="Previous"></button><span class="count">1 of 6</span><button class="arrow next" aria-label="Next"></button></div>
-    <div class="showcase-tabs" role="tablist"><button role="tab">Start</button><button role="tab">Settings</button><button role="tab">Metro Browser</button><button role="tab">Install</button><button role="tab">First start</button><button role="tab">Sign in</button></div>
+    <div class="showcase-controls"><button class="arrow prev" aria-label="Previous"></button><span class="count">1 of 7</span><button class="arrow next" aria-label="Next"></button></div>
+    <div class="showcase-tabs" role="tablist"><button role="tab">Start</button><button role="tab">Settings</button><button role="tab">Full-screen Start</button><button role="tab">Explorer</button><button role="tab">Install</button><button role="tab">First start</button><button role="tab">Sign in</button></div>
   </div>
 </section>
 
@@ -92,8 +96,8 @@
     <div class="split">
       <div class="media"><img src="assets/shots/setup.jpg" alt="Install midnightOS copying the system to the disk" width="1600" height="900" loading="lazy"></div>
       <div>
-        <h2>Try it first. Install when you're ready.</h2>
-        <p>midnightOS runs straight from a USB stick, without changing anything on your PC. When you're happy, double-click <b>Install midnightOS</b>, pick a disk and Setup does the rest.</p>
+        <h2>Install it from Windows</h2>
+        <p>Open the disc image in Windows and run <b>setup.exe</b>. Setup checks your PC, replaces Windows and keeps your Users folder, so your documents and pictures are waiting for you in midnightOS.</p>
         <a class="more" href="install.html">How to install</a>
       </div>
     </div>
@@ -111,7 +115,7 @@
           <li>64-bit processor with 2 or more cores</li>
           <li>4 GB of memory (8 GB recommended)</li>
           <li>20 GB of storage</li>
-          <li>UEFI or legacy BIOS, with Secure Boot turned off</li>
+          <li>Windows 10 or 11 on a UEFI PC, with Secure Boot turned off</li>
         </ul>
         <a class="more" href="specs.html">See all specifications</a>
       </div>
@@ -124,15 +128,15 @@
     <div class="section-title"><h2>Frequently asked questions</h2></div>
     <div class="faq-tools"><button data-expand>Expand all</button><button data-collapse>Collapse all</button></div>
     <details><summary>Is midnightOS free?</summary><div><p>Yes. midnightOS is free to download and use, and it's built on free and open-source software.</p></div></details>
-    <details><summary>When can I download it?</summary><div><p>The Developer Preview is coming soon. The <a href="download.html">download page</a> will list it as soon as it's ready.</p></div></details>
-    <details><summary>Can I try it without installing?</summary><div><p>Yes. Starting from the USB stick runs the whole system without touching your disk. Nothing changes until you choose <b>Install midnightOS</b> and confirm.</p></div></details>
-    <details><summary>Can I keep Windows?</summary><div><p>Not in the Developer Preview. Installing uses the whole disk you pick, so use a spare PC or a second disk.</p></div></details>
+    <details><summary>Where can I download it?</summary><div><p>The Release Preview is on the <a href="download.html">download page</a>.</p></div></details>
+    <details><summary>Can I start it from a USB stick?</summary><div><p>Yes. Write the disc image to a USB stick (midnightOS Setup for Windows can do that for you), start your PC from it and select <b>Install midnightOS</b> on the desktop. If Windows is on the PC you can keep it and pick midnightOS or Windows each time your PC starts, sharing the space with a slider, or erase the whole disk. With BitLocker on, turn it off in Windows first if you want to keep Windows.</p></div></details>
+    <details><summary>Can I keep Windows?</summary><div><p>Yes, if you install from a USB stick: choose to keep Windows and pick midnightOS or Windows each time your PC starts. setup.exe, run from inside Windows, replaces Windows instead and keeps your C:\Users folder as <b>Windows files</b>.</p></div></details>
     <p style="margin-top:24px"><a class="more" href="help.html">More questions? Visit Help</a></p>
   </div>
 </section>
 
 <div class="container footnotes">
-  <p>Screens are from midnightOS 0.9 Developer Preview (build 951121202612_Dev-20261117-2141) running in a virtual machine. Features and screens may change before release.</p>
+  <p>Screens are from midnightOS 0.9 Release Preview (build 0.9_RP-20261127-2312) running in a virtual machine. Features and screens may change before release.</p>
   <p>Face sign-in needs a camera. Some features need an internet connection.</p>
 </div>
 </main>
@@ -154,7 +158,7 @@
     </div>
     <div class="foot-bottom">
       <span>English (United States)</span>
-      <span>midnightOS 0.9 Developer Preview · Build 951121202612_Dev-20261117-2141</span>
+      <span>midnightOS 0.9 Release Preview · Build 0.9_RP-20261127-2312</span>
       <span>© 2026 midnightOS project</span>
     </div>
   </div>
