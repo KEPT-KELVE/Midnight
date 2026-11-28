@@ -1,0 +1,24 @@
+{
+  "name": "Midnight-1-20261128-1600.iso",
+  "version": "Midnight 1",
+  "build": "1-20261128-1600",
+  "size": 3620042752,
+  "sha256": "718ef7451b93e9c7433318b142a280742c4bbc3d70ff05446b357ba517da2d39",
+  "parts": [
+    {
+      "url": "https://github.com/KEPT-KELVE/Midnight/releases/download/v1.0/Midnight-1-20261128-1600.iso.part1",
+      "size": 1207959552,
+      "sha256": "c9cdb8015f50bb3a44aa4d2787807dedf3472d00eaa8d5fde3814518c904f9d1"
+    },
+    {
+      "url": "https://github.com/KEPT-KELVE/Midnight/releases/download/v1.0/Midnight-1-20261128-1600.iso.part2",
+      "size": 1207959552,
+      "sha256": "ce4f5737b3c5a6cebb21b925d8f2700fa6461af497835be43441ba74b1d6eb3b"
+    },
+    {
+      "url": "https://github.com/KEPT-KELVE/Midnight/releases/download/v1.0/Midnight-1-20261128-1600.iso.part3",
+      "size": 1204123648,
+      "sha256": "aeaf340b2ceac8197c20df2396ec8ec6a41411e79b1054cef2a776e56ce0b732"
+    }
+  ]
+}
