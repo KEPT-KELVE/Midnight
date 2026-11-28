@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Help - midnightOS</title>
+<meta name="description" content="midnightOS help, FAQ and keyboard shortcuts.">
+<link rel="icon" type="image/png" href="assets/logo-64.png">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html"><img src="assets/logo-64.png" alt=""><b>midnightOS</b><i class="sep"></i><span>Release Preview</span></a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <nav class="site-nav" aria-label="midnightOS">
+      <a href="index.html">Overview</a>
+      <a href="features.html">Features</a>
+      <a href="screenshots.html">Screenshots</a>
+      <a href="specs.html">Specifications</a>
+      <a href="help.html" aria-current="page">Help</a>
+      <a class="push" href="download.html">Download</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+<section class="page-head"><div class="container"><p class="crumbs"><a href="index.html">midnightOS</a> › Help</p>
+  <h1>Help and support</h1>
+  <p>Answers to common questions, troubleshooting and keyboard shortcuts.</p>
+</div></section>
+<section class="band">
+  <div class="container narrow faq" data-faq>
+    <div class="faq-tools"><button data-expand>Expand all</button><button data-collapse>Collapse all</button></div>
+    <h3 class="group">Getting started</h3>
+    <details><summary>Is midnightOS free?</summary><div><p>Yes. It's free to download and use, and it's built on free and open-source software.</p></div></details>
+    <details><summary>How do I install it?</summary><div><p>In Windows, open the disc image and run setup.exe. See <a href="install.html">How to install</a>.</p></div></details>
+    <details><summary>Can I start it from a USB stick?</summary><div><p>Yes. Start your PC from the disc image and select Install midnightOS on the desktop. You can keep Windows next to it (dual boot) or erase the whole disk.</p></div></details>
+    <details><summary>Can I keep Windows?</summary><div><p>Yes, if you install from a USB stick and choose to keep Windows. setup.exe, run from inside Windows, replaces Windows and keeps your C:\Users folder as Windows files.</p></div></details>
+    <details><summary>Why do I need to turn off Secure Boot?</summary><div><p>The Release Preview's boot loader isn't signed yet, so PCs with Secure Boot on won't start it.</p></div></details>
+    <h3 class="group">Using midnightOS</h3>
+    <details><summary>How do I change my PIN?</summary><div><p>Open Settings › Accounts.</p></div></details>
+    <details><summary>How do I set up face sign-in?</summary><div><p>Open Settings › Accounts › Face recognition and follow the steps. You need a camera.</p></div></details>
+    <details><summary>Can I run Windows programs?</summary><div><p>Many Windows programs (.exe files) run through a compatibility layer. Double-click the file to start it. Some programs and games won't work.</p></div></details>
+    <details><summary>How do I take a screenshot?</summary><div><p>Press <kbd>Print Screen</kbd>. The picture is saved in Pictures › Screenshots.</p></div></details>
+    <details><summary>How do I remove an app?</summary><div><p>Open Settings › Apps › Add or remove apps.</p></div></details>
+    <h3 class="group">Troubleshooting</h3>
+    <details><summary>The screen is black or shows text</summary><div><p>Press <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>F1</kbd> to return to the desktop. If the graphics driver doesn't start, midnightOS switches to a basic display driver by itself.</p></div></details>
+    <details><summary>Wi-Fi doesn't show any networks</summary><div><p>Check that Wi-Fi is on in quick settings (<kbd>Super</kbd> + <kbd>A</kbd>). If your adapter isn't supported, use a network cable.</p></div></details>
+    <details><summary>An app asks for administrator approval</summary><div><p>Admin Approval shows which app is asking and what it will run. Allow it only if you started the app and trust it.</p></div></details>
+  </div>
+</section>
+<section class="band grey" id="shortcuts">
+  <div class="container narrow">
+    <table class="spec">
+      <caption>Keyboard shortcuts</caption>
+      <thead><tr><th scope="col">Keys</th><th scope="col">What it does</th></tr></thead>
+      <tbody>
+        <tr><th scope="row"><kbd>Super</kbd> + <kbd>Space</kbd></th><td>Open Start</td></tr>
+        <tr><th scope="row"><kbd>Super</kbd> + <kbd>S</kbd></th><td>Search</td></tr>
+        <tr><th scope="row"><kbd>Super</kbd> + <kbd>A</kbd></th><td>Quick settings</td></tr>
+        <tr><th scope="row"><kbd>Super</kbd> + <kbd>I</kbd></th><td>Settings</td></tr>
+        <tr><th scope="row"><kbd>Super</kbd> + <kbd>E</kbd></th><td>Explorer</td></tr>
+        <tr><th scope="row"><kbd>Super</kbd> + <kbd>L</kbd></th><td>Lock</td></tr>
+        <tr><th scope="row"><kbd>Super</kbd> + <kbd>T</kbd></th><td>Terminal</td></tr>
+        <tr><th scope="row"><kbd>Super</kbd> + <kbd>D</kbd></th><td>Show desktop</td></tr>
+        <tr><th scope="row"><kbd>Super</kbd> + <kbd>Left / Right</kbd></th><td>Snap a window to half the screen</td></tr>
+        <tr><th scope="row"><kbd>Super</kbd> + <kbd>Up / Down</kbd></th><td>Maximize or restore</td></tr>
+        <tr><th scope="row"><kbd>Super</kbd> + <kbd>1 to 9</kbd></th><td>Open or switch to the app in that place on the taskbar</td></tr>
+        <tr><th scope="row"><kbd>Super</kbd> + <kbd>X</kbd></th><td>Power user menu</td></tr>
+        <tr><th scope="row"><kbd>Super</kbd> + <kbd>G</kbd></th><td>Game Overlay</td></tr>
+        <tr><th scope="row"><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd></th><td>Task Manager</td></tr>
+        <tr><th scope="row"><kbd>Print Screen</kbd></th><td>Screenshot to Pictures › Screenshots</td></tr>
+        <tr><th scope="row"><kbd>Super</kbd> + <kbd>Plus</kbd> / <kbd>Minus</kbd> / <kbd>Esc</kbd></th><td>Magnifier in, out, off</td></tr>
+        <tr><th scope="row"><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Delete</kbd></th><td>Security screen</td></tr>
+        <tr><th scope="row"><kbd>Super</kbd> + <kbd>/</kbd></th><td>All keyboard shortcuts</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:16px;color:var(--muted)">The <kbd>Super</kbd> key is the key with the logo on most keyboards.</p>
+  </div>
+</section>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="foot-cols">
+      <div><h4>midnightOS</h4><ul>
+        <li><a href="index.html">Overview</a></li><li><a href="features.html">Features</a></li>
+        <li><a href="screenshots.html">Screenshots</a></li><li><a href="specs.html">Specifications</a></li></ul></div>
+      <div><h4>Get midnightOS</h4><ul>
+        <li><a href="download.html">Download</a></li><li><a href="install.html">How to install</a></li>
+        <li><a href="release-notes.html">Release notes</a></li><li><a href="specs.html#requirements">System requirements</a></li></ul></div>
+      <div><h4>Support</h4><ul>
+        <li><a href="help.html">Help and FAQ</a></li><li><a href="help.html#shortcuts">Keyboard shortcuts</a></li>
+        <li><a href="release-notes.html#known-issues">Known issues</a></li><li><a href="install.html#trouble">Troubleshooting</a></li></ul></div>
+      <div><h4>About</h4><ul>
+        <li><a href="about.html">About midnightOS</a></li><li><a href="about.html#open-source">Open source</a></li>
+        <li><a href="about.html#privacy">Privacy</a></li><li><a href="about.html#trademarks">Trademarks</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <span>English (United States)</span>
+      <span>midnightOS 0.9 Release Preview · Build 0.9_RP-20261127-2312</span>
+      <span>© 2026 midnightOS project</span>
+    </div>
+  </div>
+</footer>
+<script src="assets/site.js"></script>
+</body>
+</html>
