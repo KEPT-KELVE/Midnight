@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReanTools - midnightOS</title>
+<meta name="description" content="ReanTools switches on optional midnightOS features with a feature ID.">
+<link rel="icon" type="image/png" href="assets/logo-64.png">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header class="site-header">
+  <div class="container">
+    <a class="brand" href="index.html"><img src="assets/logo-64.png" alt=""><b>midnightOS</b><i class="sep"></i><span>Release Preview</span></a>
+    <button class="nav-toggle" aria-label="Menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <nav class="site-nav" aria-label="midnightOS">
+      <a href="index.html">Overview</a>
+      <a href="features.html">Features</a>
+      <a href="screenshots.html">Screenshots</a>
+      <a href="specs.html">Specifications</a>
+      <a href="help.html">Help</a>
+      <a class="push" href="download.html">Download</a>
+    </nav>
+  </div>
+</header>
+<main id="main">
+<section class="page-head"><div class="container"><p class="crumbs"><a href="index.html">midnightOS</a> › ReanTools</p>
+  <h1>ReanTools</h1>
+  <p>Switch on optional midnightOS features with a feature ID.</p>
+</div></section>
+<section class="band">
+  <div class="container narrow">
+    <div class="dl-row">
+      <div><h3>Download ReanTools</h3><p>One small file. It works with this and every later midnightOS: the list of feature IDs is kept in midnightOS itself, so you never need a newer ReanTools for new features.</p><p class="meta">reantools · 3 KB · for midnightOS</p></div>
+      <a class="btn btn-primary" href="downloads/reantools" download="reantools">Download ReanTools</a>
+    </div>
+    <table class="spec" id="ids">
+      <caption>Feature IDs</caption>
+      <thead><tr><th scope="col">ID</th><th scope="col">Feature</th></tr></thead>
+      <tbody>
+        <tr><th scope="row"><code>83729461</code></th><td><b>Metro Browser</b><br>The tile-style web browser from earlier midnightOS builds, next to Firefox.</td></tr>
+        <tr><th scope="row"><code>52064918</code></th><td><b>Camera AI</b><br>AI picture enhancement in the Camera app.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<section class="band grey" id="steps">
+  <div class="container narrow">
+    <ol class="steps">
+      <li><h3>Download ReanTools in midnightOS</h3><p>Open this page in Firefox in midnightOS and select <b>Download ReanTools</b>. It's saved to your <b>Downloads</b> folder.</p></li>
+      <li><h3>Put it in place</h3><p>Open <b>Terminal</b> (<kbd>Super</kbd> + <kbd>T</kbd>) and run this. ReanTools only works from the <b>/reantools</b> folder. Select <b>Yes</b> when Admin Approval asks.</p>
+        <p><code>sudo mkdir -p /reantools &amp;&amp; sudo install -m 755 ~/Downloads/reantools /reantools/reantools</code></p></li>
+      <li><h3>Switch a feature on</h3><p>Run ReanTools with the feature ID, for example Metro Browser:</p>
+        <p><code>/reantools/reantools /enable /id:83729461</code></p>
+        <p>Select <b>Yes</b> when Admin Approval asks. ReanTools answers <b>Command Completed Successfully</b>.</p></li>
+      <li><h3>Restart your PC</h3><p>The feature is added the next time midnightOS starts.</p></li>
+    </ol>
+    <p>To switch a feature off again, use <code>/disable</code> instead of <code>/enable</code> and restart:</p>
+    <p><code>/reantools/reantools /disable /id:83729461</code></p>
+  </div>
+</section>
+<section class="band" id="messages">
+  <div class="container narrow">
+    <table class="spec">
+      <caption>What ReanTools says</caption>
+      <tbody>
+        <tr><th scope="row">Command Completed Successfully</th><td>Done. Restart to see the change.</td></tr>
+        <tr><th scope="row">The system cannot find the feature ID specified</th><td>The ID is wrong, the command is typed wrong, or ReanTools isn't in the /reantools folder.</td></tr>
+        <tr><th scope="row">Access is denied</th><td>Admin Approval was cancelled. Run it again and select Yes.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<div class="container footnotes"><p>Optional features are extras that aren't part of the standard midnightOS. They may change or be removed in later updates.</p></div>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="foot-cols">
+      <div><h4>midnightOS</h4><ul>
+        <li><a href="index.html">Overview</a></li><li><a href="features.html">Features</a></li>
+        <li><a href="screenshots.html">Screenshots</a></li><li><a href="specs.html">Specifications</a></li></ul></div>
+      <div><h4>Get midnightOS</h4><ul>
+        <li><a href="download.html">Download</a></li><li><a href="install.html">How to install</a></li>
+        <li><a href="release-notes.html">Release notes</a></li><li><a href="specs.html#requirements">System requirements</a></li>
+        <li><a href="reantools.html">ReanTools</a></li></ul></div>
+      <div><h4>Support</h4><ul>
+        <li><a href="help.html">Help and FAQ</a></li><li><a href="help.html#shortcuts">Keyboard shortcuts</a></li>
+        <li><a href="release-notes.html#known-issues">Known issues</a></li><li><a href="install.html#trouble">Troubleshooting</a></li></ul></div>
+      <div><h4>About</h4><ul>
+        <li><a href="about.html">About midnightOS</a></li><li><a href="about.html#open-source">Open source</a></li>
+        <li><a href="about.html#privacy">Privacy</a></li><li><a href="about.html#trademarks">Trademarks</a></li></ul></div>
+    </div>
+    <div class="foot-bottom">
+      <span>English (United States)</span>
+      <span>midnightOS 0.9 Release Preview · Build 0.9_RP-20261127-2312</span>
+      <span>© 2026 midnightOS project</span>
+    </div>
+  </div>
+</footer>
+<script src="assets/site.js"></script>
+</body>
+</html>
